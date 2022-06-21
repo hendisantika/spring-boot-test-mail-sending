@@ -1,8 +1,13 @@
 package com.hendisantika;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -10,6 +15,8 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,5 +44,20 @@ class NotificationControllerSecondIT {
     static void configureMailHost(DynamicPropertyRegistry registry) {
         registry.add("spring.mail.host", greenMailContainer::getHost);
         registry.add("spring.mail.port", greenMailContainer::getFirstMappedPort);
+    }
+
+    @Test
+    void shouldSendEmailWithCorrectPayloadToUser() throws Exception {
+
+        String payload = "{ \"email\": \"naruto@spring.io\", \"content\": \"Hello World!\"}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(payload, headers);
+
+        ResponseEntity<Void> response = this.testRestTemplate.postForEntity("/notifications", request, Void.class);
+
+        assertEquals(200, response.getStatusCodeValue());
+
     }
 }
