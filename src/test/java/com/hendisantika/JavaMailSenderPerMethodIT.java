@@ -32,7 +32,7 @@ class JavaMailSenderPerMethodIT {
 
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
-            .withConfiguration(GreenMailConfiguration.aConfig().withUser("duke", "springboot"))
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("naruto", "konoha"))
             .withPerMethodLifecycle(true);
 
     @Autowired
