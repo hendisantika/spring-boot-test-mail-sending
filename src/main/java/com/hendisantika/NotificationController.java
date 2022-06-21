@@ -1,8 +1,12 @@
 package com.hendisantika;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,4 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 
     private final NotificationService notificationService;
+
+    @PostMapping
+    public void createNotification(@Valid @RequestBody NotificationRequest request) {
+        this.notificationService.notifyUser(request.getEmail(), request.getContent());
+    }
 }
